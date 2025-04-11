@@ -1,10 +1,11 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Home from "./components/Home";
+import CreatePost from "./components/CreatePost";
+import EditPost from "./components/EditPost";
+import Post from "./components/Post";
 import Navbar from "./components/Navbar";
-import Home from "./pages/Home";
-import CreatePost from "./pages/CreatePost";
-import EditPost from "./pages/EditPost";
-import Login from "./pages/Login";
-import Register from "./pages/Register";
+import Login from "./components/Login";
+import Register from "./components/Register";
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/create" element={<CreatePost />} />
         <Route path="/edit/:id" element={<EditPost />} />
+        <Route path="/post/:id" element={<Post />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
       </Routes>
