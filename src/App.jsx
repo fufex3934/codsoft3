@@ -1,24 +1,24 @@
-
-import { BrowserRouter as Router,Route,Routes } from 'react-router-dom'
-import Navbar from './components/Navbar'
-import BlogList from './components/BlogList'
-import PostForm from './components/PostForm'
-import Post from './components/Post'
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Navbar from "./components/Navbar";
+import Home from "./pages/Home";
+import CreatePost from "./pages/CreatePost";
+import EditPost from "./pages/EditPost";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
 
 function App() {
-  
-
   return (
     <Router>
-      <Navbar/>
+      <Navbar />
       <Routes>
-        <Route path='/' element={<BlogList/>}/>
-        <Route path='/create' element={<PostForm/>}/>
-        <Route path='/post/:id' element={<Post/>}/>
-        
+        <Route path="/" element={<Home />} />
+        <Route path="/create" element={<CreatePost />} />
+        <Route path="/edit/:id" element={<EditPost />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
       </Routes>
     </Router>
-  )
+  );
 }
 
-export default App
+export default App;
