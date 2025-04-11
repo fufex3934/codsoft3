@@ -1,13 +1,17 @@
 // src/components/EditPost.jsx
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { db } from "../firebase";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
+import { auth } from "../firebase";
+import { onAuthStateChanged } from "firebase/auth";
 
 function EditPost() {
   const { id } = useParams();
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
+  const [user, setUser] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchPost = async () => {
@@ -19,12 +23,21 @@ function EditPost() {
       }
     };
     fetchPost();
+
+    onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser);
+    });
   }, [id]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const postDoc = doc(db, "posts", id);
-    await updateDoc(postDoc, { title, content });
+    if (user) {
+      const postDoc = doc(db, "posts", id);
+      await updateDoc(postDoc, { title, content });
+      navigate(`/post/${id}`);
+    } else {
+      alert("You must be logged in to edit a post.");
+    }
   };
 
   return (

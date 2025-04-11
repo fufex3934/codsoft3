@@ -1,24 +1,39 @@
-import React, { useState } from "react";
+// src/components/CreatePost.jsx
+import React, { useState, useEffect } from "react";
 import { db } from "../firebase";
 import { collection, addDoc } from "firebase/firestore";
+import { auth } from "../firebase";
+import { onAuthStateChanged } from "firebase/auth";
 
 function CreatePost() {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser);
+    });
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      await addDoc(collection(db, "posts"), {
-        title,
-        content,
-        createdAt: new Date().toISOString()
-      });
-      alert("Post published successfully!");
-      setTitle("");
-      setContent("");
-    } catch (error) {
-      alert("Error publishing post: " + error.message);
+    if (user) {
+      try {
+        await addDoc(collection(db, "posts"), {
+          title,
+          content,
+          createdAt: new Date().toISOString(),
+          userId: user.uid
+        });
+        alert("Post published successfully!");
+        setTitle("");
+        setContent("");
+      } catch (error) {
+        alert("Error publishing post: " + error.message);
+      }
+    } else {
+      alert("You must be logged in to create a post.");
     }
   };
 

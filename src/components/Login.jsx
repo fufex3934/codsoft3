@@ -1,16 +1,28 @@
 // src/components/Login.jsx
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { login } from "../auth";
+import { useNavigate } from "react-router-dom";
+import { auth } from "../firebase";
+import { onAuthStateChanged } from "firebase/auth";
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    onAuthStateChanged(auth, (currentUser) => {
+      if (currentUser) {
+        navigate("/create");
+      }
+    });
+  }, [navigate]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       await login(email, password);
-      alert("Logged in successfully!");
+      navigate("/create");
     } catch (error) {
       alert("Error logging in: " + error.message);
     }
